@@ -1,0 +1,100 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<title>Oregon Walks GIS Jam - Curb Ramp Inventory App</title>
+	<meta charset="utf-8">
+	<meta name="description" content="An app for use by the Oregon Walks GIS Jam group and volunteers for a curb ramp inventory in Portland, OR.">
+    <meta name="author" content="Mele Sax-Barnett http://www.pdxmele.com">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- library links -->
+	<script src="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
+	<script src="http://libs.cartocdn.com/cartodb.js/v2/cartodb.js"></script>
+
+	<!-- stylesheets -->
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.ie.css" />
+    <![endif]-->
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v2/themes/css/cartodb.css" />
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v2/themes/css/cartodb.ie.css" />
+	<![endif]-->
+
+    <style>
+		body {
+			padding: 0;
+			margin: 0;
+			}
+		html, body, #map {
+			height: 100%;
+			}
+		#instructions {
+            position: absolute;
+            left:50px;
+            top: 0;
+            margin-top: 10px;
+            }
+	</style>
+
+</head> 
+<body> 
+	<div id="map"></div>
+	<div id="instructions"><button type="button">Select an intersection to evaluate:</button></div>
+
+	<script>
+		var mapQuest = new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+        	maxZoom: 18,
+        	subdomains: ["otile1", "otile2", "otile3", "otile4"],
+        	attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Map data (c) <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors.'
+        	});          
+
+	    var map = new L.Map('map', {
+	        center: new L.LatLng(45.53266, -122.66002),
+	        zoom: 18
+	        });
+	           
+	    map.addLayer(mapQuest);
+
+	    cartodb.createLayer(map, 'http://pdxmele.cartodb.com/api/v1/viz/corners/viz.json', {
+        	query: 'select * from {{table_name}}',
+        	opacity: 0.7,
+            interactivity: "cartodb_id, id, intersecti",
+    			}).on('done', function(layer) {
+        			map.addLayer(layer);
+					layer.on('featureOver', function(e, pos, latlng, data) {
+          				//cartodb.log.log(e, pos, latlng, data);
+          				document.body.style.cursor = "pointer";
+        				});
+					layer.on('featureOut', function(e, pos, latlng, data) {
+          				document.body.style.cursor = "default";
+        				});
+					layer.on('featureClick', function(e, pos, latlng, data) {
+						var int_id = "";
+            			//get the intersection #
+            			for (var column in data) {
+                    		if (column == "intersecti") {
+                        		int_id = data[column];
+                        		}
+                    		}
+            			//go to the intersection evaluation pate with that intersection #
+            			window.location = "inter_survey.html?" + int_id ;	
+            			});
+        			layer.on('error', function(err) {
+          				cartodb.log.log('error: ' + err);
+        				});
+					}).on('error', function() {
+        				cartodb.log.log("some error occurred");
+      					});
+
+	    //location stuff
+	    /*function onLocationError(e) {
+	        //alert(e.message);
+	        }
+	    map.on('locationerror', onLocationError);*/
+
+	    map.locate({setView: true, maxZoom: 18});
+	
+	</script>
+</body>
+</html>
