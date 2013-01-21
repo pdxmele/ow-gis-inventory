@@ -13,8 +13,8 @@ var init = function (onSelectFeatureFunction) {
     //unique styling so evaluated = y shows up differently
     var myStyleMap = new OpenLayers.StyleMap({pointRadius: 7});
     var lookup = {
-        "y": {fillColor: "green"},
-        "n": {fillColor: "orange"}
+        "y": {fillColor: "red"},
+        "n": {fillColor: "green"}
         };
     myStyleMap.addUniqueValueRules("default", "evaluated", lookup);
 
@@ -40,6 +40,24 @@ var init = function (onSelectFeatureFunction) {
                         this.map.zoomToExtent(this.getDataExtent());
                         }
                     }*/
+        });
+
+        var intersections = new OpenLayers.Layer.Vector("Intersections", {
+        projection: gg,
+        strategies: [new OpenLayers.Strategy.BBOX()/*, 
+            new OpenLayers.Strategy.Refresh({interval: 60000, force: true})*/],
+        protocol: new OpenLayers.Protocol.Script({
+            url: "http://pdxmele.cartodb.com/api/v2/sql",
+            params: {
+                q: "select * from intersections", 
+                format: "geojson"
+                },
+            format: new OpenLayers.Format.GeoJSON({
+                ignoreExtraDims: true
+                }),
+                callbackKey: "callback"
+                }),
+            styleMap: myStyleMap,
         });
 
     var selectControl = new OpenLayers.Control.SelectFeature(cartoDB, {
@@ -115,7 +133,8 @@ var init = function (onSelectFeatureFunction) {
                 transitionEffect: 'resize'
             }),
             vector,
-            cartoDB
+            cartoDB,
+            intersections
         ],
         center: new OpenLayers.LonLat(-13654000, 5705400),
         zoom:18
