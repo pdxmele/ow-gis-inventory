@@ -1,0 +1,106 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<title>Oregon Walks GIS Jam - Curb Ramp Inventory App</title>
+	<meta charset="utf-8">
+	<meta name="description" content="An app for use by the Oregon Walks GIS Jam group and volunteers for a curb ramp inventory in Portland, OR.">
+    <meta name="author" content="Mele Sax-Barnett http://www.pdxmele.com">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- styles -->
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.ie.css" />
+    <![endif]-->
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v2/themes/css/cartodb.css" />
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v2/themes/css/cartodb.ie.css" />
+	<![endif]-->
+
+	<!--leaflet & jquery links-->
+	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+	<script src="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
+    <script src="lib/bing.js"></script>
+	<script src="http://libs.cartocdn.com/cartodb.js/v2/cartodb.js"></script>
+    <script type="text/javascript" src="lib/inter_script.js"></script>
+</head> 
+<body> 
+
+	<script>
+		// this js data passing stuff from http://www.boutell.com/newfaq/creating/scriptpass.html
+		var int_id = window.location.search;
+		// Skip the leading ?, which should always be there, 
+		// but be careful anyway
+		if (int_id.substring(0, 1) == '?') {
+			int_id = int_id.substring(1);
+			}
+		var intdata = int_id; 
+	</script>
+
+<!-- Start of first page: #one -->
+<div data-role="page" id="one" data-theme="c">
+	<div data-role="header" data-theme="c">
+		<h1>Intersection #
+			<script>
+			document.write(intdata);
+			</script>
+		</h1>
+	</div><!-- /header -->
+
+	<div data-role="content" id="content-one">	
+		<div id="map" style="height:350px"></div>
+		<p>(Put name of cross sts here)</p>
+		<a id="wholeBtn" data-role="button" data-theme="c" href="#whole" data-icon="arrow-r"
+        data-iconpos="right">
+            Evaluate whole intersection
+        </a>
+        <a id="rampBtn" data-role="button" data-theme="c" href="#ramp" data-icon="arrow-r"
+        data-iconpos="right">
+            Evaluate ramp-by-ramp
+        </a>
+        <a id="backBtn" data-role="button" data-theme="c" href="file:///Users/pdxmele/github/wpc-gis-inventory/index.html"
+        data-icon="back" data-iconpos="left">
+            Back
+        </a>
+
+
+
+
+		<!--<h2>One</h2>
+		
+		<p>I have an <code>id</code> of "one" on my page container. I'm first in the source order so I'm shown when the page loads.</p>	
+		
+		<p>This is a multi-page boilerplate template that you can copy to build your first jQuery Mobile page. This template contains multiple "page" containers inside, unlike a <a href="page-template.html"> single page template</a> that has just one page within it.</p>	
+		<p>Just view the source and copy the code to get started. All the CSS and JS is linked to the jQuery CDN versions so this is super easy to set up. Remember to include a meta viewport tag in the head to set the zoom level.</p>
+		<p>You link to internal pages by referring to the <code>id</code> of the page you want to show. For example, to <a href="#two" >link</a> to the page with an <code>id</code> of "two", my link would have a <code>href="#two"</code> in the code.</p>	
+
+		<p><a href="#popup" data-role="button" data-rel="dialog" data-transition="pop">Show page "popup" (as a dialog)</a></p> -->
+	</div><!-- /content -->
+	
+	<!--<div data-role="footer" data-theme="c">
+		<h4>Page Footer</h4>
+	</div>--> <!-- /footer -->
+</div><!-- /page one -->
+
+<!-- Start of page: #popup -->
+<div data-role="page" id="popup" data-theme="c">
+
+	<div data-role="header" data-theme="c">
+		<h1>Dialog</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		<h2>Popup</h2>
+		<p>I have an id of "popup" on my page container and only look like a dialog because the link to me had a <code>data-rel="dialog"</code> attribute which gives me this inset look and a <code>data-transition="pop"</code> attribute to change the transition to pop. Without this, I'd be styled as a normal page.</p>		
+		<p><a href="#one" data-rel="back" data-role="button" data-inline="true" data-icon="back">Back to page "one"</a></p>	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-theme="c">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+</div><!-- /page popup -->
+
+</body>
+</html>
