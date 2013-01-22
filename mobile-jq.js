@@ -30,6 +30,7 @@ $(document).ready(function() {
     }
     $(window).bind("orientationchange resize pageshow", fixContentHeight);
     document.body.onload = fixContentHeight;
+    fixContentHeight();
 
     // Map zoom  
     $("#plus").click(function(){
