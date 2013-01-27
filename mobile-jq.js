@@ -25,7 +25,7 @@ $(document).ready(function() {
                 selectedFeature = feature; 
                 $.mobile.changePage("#popup", "pop"); 
             });
-            initLayerList();
+            //initLayerList();
         }
     }
     $(window).bind("orientationchange resize pageshow", fixContentHeight);
@@ -48,6 +48,33 @@ $(document).ready(function() {
     });
     
     $('#popup').live('pageshow',function(event, ui){
+        var cur_intID = '';
+        for (var attr in selectedFeature.attributes){
+            if (attr == "node_id") {
+                cur_intID = selectedFeature.attributes[attr];
+                document.getElementById("intersectionID").innerHTML = cur_intID;
+            }
+        }
+
+        /*put the query together to get info from the corners table in CartoDB*/
+        var stNmQuery = "q=SELECT st_rt_nm, st_lf_nm from corners where intersecti = '" +cur_intID+"' limit 1";
+        var url = "http://pdxmele.cartodb.com/api/v2/sql?"+stNmQuery;
+
+        /*request & parse the json*/
+        $.getJSON(url, function (data) {
+             $.each(data.rows[0], function(key, val) {
+                //name of right street
+                if (key == 'st_rt_nm') {
+                    document.getElementById("streetR").innerHTML = val;
+                    }
+                //name of left street
+                if (key == 'st_lf_nm') {
+                    document.getElementById("streetL").innerHTML = val;
+                    }
+                });
+            });
+
+        /* old popup info fill code
         for (var attr in selectedFeature.attributes){
             if (attr == "id") {
                 document.getElementById("cornerID").innerHTML = selectedFeature.attributes[attr];
@@ -62,12 +89,16 @@ $(document).ready(function() {
                 document.getElementById("streetL").innerHTML = selectedFeature.attributes[attr];
             }
         }
+        */
         
+    });
+    $('#intersectionpage').live('pageshow',function(event, ui){
+        init_two();
     });
 
 });
 
-function initLayerList() {
+/* function initLayerList() {
     $('#layerspage').page();
     $('<li>', {
             "data-role": "list-divider",
@@ -118,4 +149,4 @@ function addLayerToList(layer) {
             $(item).toggleClass('checked');
         }
     });
-}
+} */
