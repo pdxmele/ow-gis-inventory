@@ -125,7 +125,7 @@ function init_two() {
         protocol: new OpenLayers.Protocol.Script({
             url: "http://pdxmele.cartodb.com/api/v2/sql",
             params: {
-                q: "select * from corners", 
+                q: "select * from corners where intersecti ='" +document.getElementById("intersectionID").innerHTML+ "'", 
                 format: "geojson"
                 },
             format: new OpenLayers.Format.GeoJSON({
