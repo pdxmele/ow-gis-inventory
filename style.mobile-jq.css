@@ -21,6 +21,10 @@ body {
     width: 100%;
     height: 100%;
 }
+#intersectionpage, #intersectionpage .ui-content, #i_map {
+    width: 100%;
+    height: 200px;
+}
 .olControlAttribution {
     font-size: 10px;
     bottom: 5px;
