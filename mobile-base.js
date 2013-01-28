@@ -168,4 +168,7 @@ function init_two() {
         center: new OpenLayers.LonLat(-13654000, 5705400),
         zoom:18
     });
+
+    document.getElementById("streetR2").innerHTML = document.getElementById("streetR").innerHTML;
+    document.getElementById("streetL2").innerHTML = document.getElementById("streetL").innerHTML;
 }
