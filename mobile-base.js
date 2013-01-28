@@ -115,17 +115,49 @@ var init = function (onSelectFeatureFunction) {
     });
 };
 
-/* second map (for zoomed-in intersection page) */
+/* initialize ramp-by-ramp intersection page */
 
 function init_two() {
+    $('#i_map').empty(); //clears map div to fix duplicating map bug?
 
-    var cartoDB = new OpenLayers.Layer.Vector("Corners", {
+    var cStyleMap = new OpenLayers.StyleMap({
+        "default": {
+            externalGraphic: "img/newarrow.png",
+            //graphicWidth: 17,
+            graphicHeight: 50,
+            //graphicXOffset: 4,
+            //graphicYOffset: 4,
+            rotation: "${i_angle}",
+            fillOpacity: 1 //"${opacity}"
+            }/*,
+        "select": {
+            cursor: "crosshair",
+            //externalGraphic: "../img/marker.png"
+            },
+        "clockwise": {
+            //graphicXOffset: -19,
+            //graphicYOffset: -19,
+            rotation: 45//"${cw_angle}"
+            },
+        "counter_cw": {
+            //graphicYOffset: -19,
+            //graphicYOffset: -19,
+            rotation: -45//"${ccw_angle}"
+            }*/
+        });
+    var lookup2 = {
+        "cw": {graphicXOffset: 0, graphicYOffset: -20,},
+        "counterw": {graphicXOffset: 0, graphicYOffset: -20,}
+        };
+    cStyleMap.addUniqueValueRules("default", "dir", lookup2);
+
+    var cartoDB = new OpenLayers.Layer.Vector("Ramps", {
         projection: wgs,
         strategies: [new OpenLayers.Strategy.Fixed()],
         protocol: new OpenLayers.Protocol.Script({
             url: "http://pdxmele.cartodb.com/api/v2/sql",
             params: {
-                q: "select * from corners where intersecti ='" +document.getElementById("intersectionID").innerHTML+ "'", 
+                q: "select * from ramps where intersecti ='" +document.getElementById("intersectionID").innerHTML+ "'", 
                 format: "geojson"
                 },
             format: new OpenLayers.Format.GeoJSON({
@@ -133,7 +165,7 @@ function init_two() {
                 }),
                 callbackKey: "callback"
                 }),
-            styleMap: myStyleMap,
+            styleMap: cStyleMap,
             //zoom to extent
             eventListeners: {
                 "featuresadded": function() {
