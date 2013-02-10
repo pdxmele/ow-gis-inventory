@@ -122,34 +122,20 @@ function init_two() {
 
     var cStyleMap = new OpenLayers.StyleMap({
         "default": {
-            externalGraphic: "img/newarrow.png",
+            externalGraphic: "img/two_arrows_plain.png",
             //graphicWidth: 17,
-            graphicHeight: 50,
+            graphicHeight: 30,
             //graphicXOffset: 4,
             //graphicYOffset: 4,
-            rotation: "${i_angle}",
+            rotation: "${im_angle}", //this is the field representing the proper angle/bearing for the image so that it properly represents the ramp directions
             fillOpacity: 1 //"${opacity}"
             }/*,
         "select": {
             cursor: "crosshair",
             //externalGraphic: "../img/marker.png"
-            },
-        "clockwise": {
-            //graphicXOffset: -19,
-            //graphicYOffset: -19,
-            rotation: 45//"${cw_angle}"
-            },
-        "counter_cw": {
-            //graphicYOffset: -19,
-            //graphicYOffset: -19,
-            rotation: -45//"${ccw_angle}"
             }*/
         });
-    var lookup2 = {
-        "cw": {graphicXOffset: 0, graphicYOffset: -20,},
-        "counterw": {graphicXOffset: 0, graphicYOffset: -20,}
-        };
-    cStyleMap.addUniqueValueRules("default", "dir", lookup2);
+
 
     var cartoDB = new OpenLayers.Layer.Vector("Ramps", {
         projection: wgs,
@@ -157,7 +143,7 @@ function init_two() {
         protocol: new OpenLayers.Protocol.Script({
             url: "http://pdxmele.cartodb.com/api/v2/sql",
             params: {
-                q: "select * from ramps where intersecti ='" +document.getElementById("intersectionID").innerHTML+ "'", 
+                q: "select * from corners where intersecti ='" +document.getElementById("intersectionID").innerHTML+ "'", 
                 format: "geojson"
                 },
             format: new OpenLayers.Format.GeoJSON({
